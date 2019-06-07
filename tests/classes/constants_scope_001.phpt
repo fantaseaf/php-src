@@ -9,7 +9,6 @@ class ErrorCodes {
 	const INFO = "Informational message\n";
 
 	static function print_fatal_error_codes() {
-		echo "FATAL = " . FATAL . "\n";
 		echo "self::FATAL = " . self::FATAL;
     }
 }
@@ -27,10 +26,7 @@ ErrorCodes::print_fatal_error_codes();
 ErrorCodesDerived::print_fatal_error_codes();
 
 ?>
---EXPECTF--
-
-Notice: Use of undefined constant FATAL - assumed 'FATAL' in %sconstants_scope_001.php on line %d
-FATAL = FATAL
+--EXPECT--
 self::FATAL = Fatal error
 self::FATAL = Worst error
 parent::FATAL = Fatal error

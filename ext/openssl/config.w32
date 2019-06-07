@@ -1,7 +1,6 @@
-// $Id$
 // vim:ft=javascript
 
-ARG_WITH("openssl", "OpenSSL support", "no");
+ARG_WITH("openssl", "OpenSSL support", "no,shared");
 
 if (PHP_OPENSSL != "no") {
 	var ret = SETUP_OPENSSL("openssl", PHP_OPENSSL);
@@ -22,5 +21,3 @@ if (PHP_OPENSSL != "no") {
 		}
 	}
 }
-
-

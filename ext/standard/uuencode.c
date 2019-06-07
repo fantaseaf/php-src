@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 7                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2017 The PHP Group                                |
+   | Copyright (c) The PHP Group                                          |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -15,8 +15,6 @@
    | Author: Ilia Alshanetsky <ilia@php.net>                              |
    +----------------------------------------------------------------------+
  */
-
-/* $Id$ */
 
 /*
  * Portions of this code are based on Berkeley's uuencode/uudecode
@@ -141,7 +139,7 @@ PHPAPI zend_string *php_uudecode(char *src, size_t src_len) /* {{{ */
 	e = src + src_len;
 
 	while (s < e) {
-		if ((len = PHP_UU_DEC(*s++)) <= 0) {
+		if ((len = PHP_UU_DEC(*s++)) == 0) {
 			break;
 		}
 		/* sanity check */
@@ -192,13 +190,13 @@ PHPAPI zend_string *php_uudecode(char *src, size_t src_len) /* {{{ */
 	return dest;
 
 err:
-	zend_string_free(dest);
+	zend_string_efree(dest);
 
 	return NULL;
 }
 /* }}} */
 
-/* {{{ proto string convert_uuencode(string data)
+/* {{{ proto string|false convert_uuencode(string data)
    uuencode a string */
 PHP_FUNCTION(convert_uuencode)
 {
@@ -206,14 +204,14 @@ PHP_FUNCTION(convert_uuencode)
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(src)
-	ZEND_PARSE_PARAMETERS_END_EX(RETURN_FALSE);
+	ZEND_PARSE_PARAMETERS_END();
 	if (ZSTR_LEN(src) < 1) { RETURN_FALSE; }
 
 	RETURN_STR(php_uuencode(ZSTR_VAL(src), ZSTR_LEN(src)));
 }
 /* }}} */
 
-/* {{{ proto string convert_uudecode(string data)
+/* {{{ proto string|false convert_uudecode(string data)
    decode a uuencoded string */
 PHP_FUNCTION(convert_uudecode)
 {
@@ -222,7 +220,7 @@ PHP_FUNCTION(convert_uudecode)
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(src)
-	ZEND_PARSE_PARAMETERS_END_EX(RETURN_FALSE);
+	ZEND_PARSE_PARAMETERS_END();
 	if (ZSTR_LEN(src) < 1) { RETURN_FALSE; }
 
 	if ((dest = php_uudecode(ZSTR_VAL(src), ZSTR_LEN(src))) == NULL) {
@@ -233,12 +231,3 @@ PHP_FUNCTION(convert_uudecode)
 	RETURN_STR(dest);
 }
 /* }}} */
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
